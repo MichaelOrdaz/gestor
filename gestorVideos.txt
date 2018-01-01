@@ -1,0 +1,135 @@
+﻿pasos.
+
+necesito hacer el gestor para subir videos.
+
+como requisitos para los usuarios, de entrada debe haber administradores y usuarios finales,
+para este módulo debo hacer una tabla que me guarde los datos del usuario y asi poder entrar a su sesión
+
+como siguiente paso debo tener una tabla que me guarde la referencia a los videos que seran almacenados en el servidor,
+estos videos tendran un id unico, y deberan tener algunos aspectos,
+
+Esto es lo mas relevante hasta el momento, ahora un usuario podria ver varios videos, y un video puede ser visto por varios usuarios
+por lo tanto la relacion entre ambas es multiple lo cual hace que tengamos que hacer una tercera tabla para relacionar a los usuarios y los clientes.
+
+ahora bien los usuarios seran los del telemarketing, si no me equivoco, no vale la pena hacer una pagina de inicio y etcetera, mejor uniciar con un login de ahi se derrame todo.
+
+
+
+create DATABASE mt_gestorVideos;
+use mt_gestorVideos;
+create table mt_user(
+	usr_id int unsigned not null auto_increment,
+	usr_nombre varchar(40) not null,
+	usr_paterno varchar(40) not null,
+	usr_materno varchar(40) not null,
+	usr_tipo smallint not null,
+	usr_usuario varchar(20) not null,
+	usr_pass varchar(20) not null,
+	usr_codigo_tienda varchar(20) not null,
+	PRIMARY KEY (usr_id)
+)ENGINE=InnoDB, charset=UTF8;
+
+create table mt_videoTraining(
+	vt_id int unsigned not null auto_increment,
+	vt_titulo varchar(150) not null,
+	vt_location varchar(200) not null,
+	vt_descripcion varchar(255) not null,
+	PRIMARY KEY (vt_id)
+)ENGINE=InnoDB, charset=UTF8;
+
+
+create table mt_usr_vt(
+	uv_user int unsigned not null,
+	uv_video int unsigned not null,
+	PRIMARY KEY(uv_user, uv_video),
+	FOREIGN KEY(uv_user) REFERENCES mt_user(usr_id) on delete cascade on update cascade,
+    FOREIGN kEY(uv_video) REFERENCES mt_videoTraining(vt_id) on delete cascade on update cascade
+)ENGINE=InnoDB, charset=UTF8;
+
+INSERT INTO mt_user VALUES(default, "microtec", "unknown", "unknown", 1, "microtec", "12345", "unknown");
+
+
+ya tengo la interfaz para iniciar sesión
+
+necesito que pueda ingresar al sistema, osea logearme.
+para esto debo hacer una consulta a la base de datos, mediante una petición ajax, mandando los usuarios
+, el logeo de los usuarios ya quedo puedo saltar al sistema.
+
+ahora que toca hacer???
+me decia que los usuarios 
+para empezar existe el superusuario que es microtec, el podra dar de alta mas administradores y usuarios, 
+los administradores podran hacer mas administradores??
+los administradores deberan crear usuarios que seran los usuarios de telemarketing o de ventas.
+para los administradores deberan tener un tablero de control, aqui podran gestionar los videos y los usuarios de telemarketing,
+
+los administradores veran en forma de lista los videos??
+cuantos videos seran para la longitud de la lista, cada video tendra un checlbox para poderselo asignar a los usuarios,
+ de los usuarios hare ABCM
+ de los videos hare ABCM
+
+ perfecto hemos dado un rol muy diferente es asi como agregar un modulo. entonces los usuarios ya existen los jalamos de la tabla existente, 
+ la tabla de videos es la que si debo de agregar y la de videos con cliente, para relacionarlos, 
+
+ como administrar los videos. y mas bien como mirarlos
+
+ administrar los vides, ABCM
+
+ en mi barra de navegacion puedo hacer que el boton de salir este presente y aparezca el nombre de la persona
+
+ Ahora para empezar a hacer este desmadre lo que voy ha hacer es lo siguiente, mostrar una opcion
+ mostrar videos, 
+ dependiento el videos se agreguen las imagenes.
+
+ 21/12/17 debe de subir el archivo y almacenarse en la base de datos y en el servidor, despues consultar todos los videos para que se observen en una lista (solo nombre y opcion de ver), despues eliminar y editar que es mas facil, 
+
+ la meta de que ya se almacene el video en la BD y en servidor esta lista, ahorta toca hacer la consulta
+
+ la consulta ya quedo ahora toca hacer lo que viene siendo la baja del video esta debe de ser borrado el registro y borrado el video.
+ la modificacion del video debe de mofificarse registros y en caso de el nuevo video debo de realizar dos pasos, eliminar el video viejo y subir el nuevo video.
+
+ con esas opciones estaria haciendo todo, a excepcion de ver el video.
+{	ver el video, es dar play y poner pausa	}
+
+el video ya se reproduce perfectamente, puedo ponerle pause y reproducirlo sin ningun problema, asi como subir y bajar el volumen perfectamente.
+
+esto ya esta prefecto.
+
+ya tengo el menu contextual con las opciones ahora hay que darle funcionalidad.
+
+hoy debe de dar de alta, eliminar y editar el video.
+
+
+las preguntas ??
+para esta parte pienso una tabla mysql
+la talba tendra su id y almacenara preguntas completas
+tendra una respuesta correcta y 3 erroneas
+la respuesta correcta la alamacenare por separado.
+las opciones las guardare en forma de json.
+
+un video tiene varias preguntas y una pregunta pertenece a un solo video, por lo tanto la relacion es uno a mucho, foreign key en qts_questions
+
+create table qts_questions(
+	qts_id int unsigned not null auto_increment,
+	qts_pregunta varchar(200) not null,
+	qts_respuesta varchar(100) not null,
+	qts_opciones varchar(250) not null,
+	qts_video int not null,
+	PRIMARY KEY (qts_id),
+	FOREIGN_KEY(qts_video) REFERENCES mt_videotraining(vt_id) on delete cascade on update cascade
+)ENGINE=InnoDB, charset=UTF8;
+
+
+en la relacion de usuarios y videos puedo hacer un contador para que solo lo reproduzca una vez el video.
+
+ese contador de entrada lo aumento en cuanto se acabe el video, lo disparara cuando la propiedad
+video.ended este en true, cuando eso pase el contador aumentara
+
+26/12/17
+ya elimino de la base de datos los videos me falta eliminarlos del servidor
+tambien ya esta listo eliminarlos del servidor.
+
+me falta update los videos.
+
+
+
+
